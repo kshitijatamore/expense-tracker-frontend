@@ -127,18 +127,10 @@ const deleteTransaction = async (id) => {
   }
 };
 
-const currentUser =
-  localStorage.getItem("userEmail");
-
-const userTransactions =
-  transactions.filter(
-    (t) => t.user === currentUser
-  );
-
 const filteredTransactions =
   selectedMonth === ""
-    ? userTransactions
-    : userTransactions.filter(
+    ? transactions
+    : transactions.filter(
         (t) =>
           new Date(t.date).getMonth() ===
           Number(selectedMonth)
@@ -432,6 +424,6 @@ boxSizing: "border-box",
     </div>
     
   );
-}
+
 
 export default Dashboard;
