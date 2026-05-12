@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pie } from "react-chartjs-2";
 import { useState, useEffect } from "react";
@@ -18,15 +19,68 @@ function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [date, setDate] = useState("");
-  const [transactions, setTransactions] = useState(() => {
-  return JSON.parse(localStorage.getItem("transactions")) || [];
-});
+  const [transactions, setTransactions] = useState([]);
 
-  const addTransaction = () => {
-    if (!amount || !category || !date) {
-  alert("Please fill all fields");
-  return;
-}
+const fetchTransactions = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(
+      "https://expense-tracker-react-sh1t.onrender.com/api/transactions",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    setTransactions(res.data);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+useEffect(() => {
+  fetchTransactions();
+}, []);
+
+const addTransaction = async () => {
+  if (!amount || !category || !date) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const newTransaction = {
+      type,
+      amount: Number(amount),
+      category,
+      date
+    };
+
+    await axios.post(
+      "https://expense-tracker-react-sh1t.onrender.com/api/transactions",
+      newTransaction,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    fetchTransactions();
+
+    setAmount("");
+    setCategory("");
+    setDate("");
+
+  } catch (err) {
+    console.log(err);
+  }
+};
   const newTransaction = {
     type,
     amount :Number(amount),
@@ -36,28 +90,42 @@ function Dashboard() {
     localStorage.getItem("userEmail")
   };
 
-  setTransactions((prev) => [...prev, newTransaction]);
+ 
+  try {
+    await axios.post(
+      "https://expense-tracker-react-sh1t.onrender.com/api/add",
+      newTransaction
+    );
+
+    fetchTransactions();
 
   setAmount("");
   setCategory("");
    setDate("");
+     } catch (err) {
+    console.log(err);
+  }
 };
 
+const deleteTransaction = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
 
-const deleteTransaction = (indexToDelete) => {
-  const updatedTransactions = transactions.filter(
-    (_, index) => index !== indexToDelete
-  );
+    await axios.delete(
+      `https://expense-tracker-react-sh1t.onrender.com/api/transactions/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
 
-  setTransactions(updatedTransactions);
+    fetchTransactions();
+
+  } catch (err) {
+    console.log(err);
+  }
 };
-
-useEffect(() => {
-  localStorage.setItem(
-    "transactions",
-    JSON.stringify(transactions)
-  );
-}, [transactions]);
 
 const currentUser =
   localStorage.getItem("userEmail");
@@ -344,7 +412,7 @@ boxSizing: "border-box",
   </p>
 
   <button
-    onClick={() => deleteTransaction(index)}
+    onClick={() => deleteTransaction(t._id)}
     style={{
       padding: "5px 10px",
       background: "#dc3545",
