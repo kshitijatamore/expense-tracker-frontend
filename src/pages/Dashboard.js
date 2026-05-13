@@ -361,6 +361,42 @@ boxSizing: "border-box",
   ))}
 </div>
 
+<hr style={{ margin: "20px 0" }} />
+
+<h2>Income Analytics</h2>
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+    marginTop: "10px"
+  }}
+>
+  {Object.entries(
+    filteredTransactions.reduce((acc, transaction) => {
+      if (transaction.type === "income") {
+        acc[transaction.category] =
+          (acc[transaction.category] || 0) +
+          Number(transaction.amount);
+      }
+
+      return acc;
+    }, {})
+  ).map(([category, total], index) => (
+    <div
+      key={index}
+      style={{
+        padding: "10px",
+        background: "#d4edda",
+        borderRadius: "10px"
+      }}
+    >
+      {category}: ₹{total}
+    </div>
+  ))}
+</div>
+
 
 <h2>Transactions</h2>
 
