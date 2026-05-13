@@ -329,43 +329,36 @@ boxSizing: "border-box",
 <hr style={{ margin: "20px 0" }} />
 <h2>Category Analytics</h2>
 
-<div style={{
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "10px",
-  marginTop: "10px"
-}}>
-  <div style={{ padding: "10px", background: "#ffe5e5", borderRadius: "10px" }}>
-    🍔 Food: ₹{
-      filteredTransactions
-        .filter((t) => t.category === "Food")
-        .reduce((acc, t) => acc + Number(t.amount), 0)
-    }
-  </div>
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+    marginTop: "10px"
+  }}
+>
+  {Object.entries(
+    filteredTransactions.reduce((acc, transaction) => {
+      if (transaction.type === "expense") {
+        acc[transaction.category] =
+          (acc[transaction.category] || 0) +
+          Number(transaction.amount);
+      }
 
-  <div style={{ padding: "10px", background: "#e5f0ff", borderRadius: "10px" }}>
-    ✈️ Travel: ₹{
-      filteredTransactions
-        .filter((t) => t.category === "Travel")
-        .reduce((acc, t) => acc + Number(t.amount), 0)
-    }
-  </div>
-
-  <div style={{ padding: "10px", background: "#f0e5ff", borderRadius: "10px" }}>
-    🛍️ Shopping: ₹{
-      filteredTransactions
-        .filter((t) => t.category === "Shopping")
-        .reduce((acc, t) => acc + Number(t.amount), 0)
-    }
-  </div>
-
-  <div style={{ padding: "10px", background: "#e5ffe5", borderRadius: "10px" }}>
-    🧾 Bills: ₹{
-      filteredTransactions
-        .filter((t) => t.category === "Bills")
-        .reduce((acc, t) => acc + Number(t.amount), 0)
-    }
-  </div>
+      return acc;
+    }, {})
+  ).map(([category, total], index) => (
+    <div
+      key={index}
+      style={{
+        padding: "10px",
+        background: "#f0f0f0",
+        borderRadius: "10px"
+      }}
+    >
+      {category}: ₹{total}
+    </div>
+  ))}
 </div>
 
 
