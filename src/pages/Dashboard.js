@@ -81,32 +81,8 @@ const addTransaction = async () => {
   } catch (err) {
     console.log(err);
   }
-};
-  const newTransaction = {
-    type,
-    amount :Number(amount),
-    category,
-     date,
-      user:
-    localStorage.getItem("userEmail")
-  };
-
- 
-  try {
-    await axios.post(
-      "https://expense-tracker-react-sh1t.onrender.com/api/add",
-      newTransaction
-    );
-
-    fetchTransactions();
-
-  setAmount("");
-  setCategory("");
-   setDate("");
-     } catch (err) {
-    console.log(err);
-  }
-};
+}; 
+  
 
 const deleteTransaction = async (id) => {
   try {
@@ -156,8 +132,6 @@ const totalExpense = filteredTransactions
     }
   ]
 };
-
-const navigate = useNavigate();
 
 const logout = () => {
   localStorage.removeItem("token");
@@ -425,6 +399,7 @@ boxSizing: "border-box",
     </div>
     
   );
+}
 
 
 export default Dashboard;
