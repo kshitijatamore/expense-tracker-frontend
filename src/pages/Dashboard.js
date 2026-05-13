@@ -68,7 +68,7 @@ const addTransaction = async () => {
     const newTransaction = {
       type,
       amount: Number(amount),
-      category : type === "income" ? "Salary" : category,
+      category: type === "income" ? "Salary" : category,
       date
     };
 
@@ -229,7 +229,17 @@ const logout = () => {
   <option value="11">December</option>
 </select>
 
-      <select onChange={(e) => setType(e.target.value)}>
+      <select
+  onChange={(e) => {
+    setType(e.target.value);
+
+    if (e.target.value === "income") {
+      setCategory("Salary");
+    } else {
+      setCategory("");
+    }
+  }}
+>
         
         <option value="expense">Expense</option>
         <option value="income">Income</option>
@@ -354,42 +364,6 @@ boxSizing: "border-box",
       style={{
         padding: "10px",
         background: "#f0f0f0",
-        borderRadius: "10px"
-      }}
-    >
-      {category}: ₹{total}
-    </div>
-  ))}
-</div>
-
-<hr style={{ margin: "20px 0" }} />
-
-<h2>Income Analytics</h2>
-
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "10px",
-    marginTop: "10px"
-  }}
->
-  {Object.entries(
-    filteredTransactions.reduce((acc, transaction) => {
-      if (transaction.type === "income") {
-        acc[transaction.category] =
-          (acc[transaction.category] || 0) +
-          Number(transaction.amount);
-      }
-
-      return acc;
-    }, {})
-  ).map(([category, total], index) => (
-    <div
-      key={index}
-      style={{
-        padding: "10px",
-        background: "#d4edda",
         borderRadius: "10px"
       }}
     >
