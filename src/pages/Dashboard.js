@@ -16,7 +16,6 @@ function Dashboard() {
   const [type, setType] = useState("expense");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
-  const [source, setSource] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [date, setDate] = useState("");
@@ -57,8 +56,7 @@ const addTransaction = async () => {
   if (
   !amount ||
   !category ||
-  !date ||
-  (type === "expense" && !source)
+  !date
 ) {
     alert("Please fill all fields");
     return;
@@ -71,7 +69,6 @@ const addTransaction = async () => {
       type,
       amount: Number(amount),
       category,
-       source,
       date
     };
 
@@ -89,7 +86,6 @@ const addTransaction = async () => {
 
     setAmount("");
     setCategory("");
-    setSource("");
     setDate("");
 
   } catch (err) {
@@ -302,29 +298,6 @@ boxSizing: "border-box",
     </>
   )}
 </datalist>
-
-{type === "expense" && (
-  <>
-    <select
-      value={source}
-      onChange={(e) => setSource(e.target.value)}
-      style={{
-        padding: "10px",
-        width: "100%",
-        borderRadius: "8px",
-        marginTop: "10px"
-      }}
-    >
-      <option value="">Select Expense Source</option>
-
-      <option value="Salary">Salary</option>
-      <option value="Business">Business</option>
-      <option value="Pocket Money">Pocket Money</option>
-    </select>
-
-    <br /><br />
-  </>
-)}
 
       <br /><br />
 
