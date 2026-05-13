@@ -43,8 +43,14 @@ const fetchTransactions = async () => {
 const navigate = useNavigate();
 
 useEffect(() => {
-  fetchTransactions();
-}, []);
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/");
+  } else {
+    fetchTransactions();
+  }
+}, [navigate]);
 
 const addTransaction = async () => {
   if (!amount || !category || !date) {
