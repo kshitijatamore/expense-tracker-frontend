@@ -54,7 +54,12 @@ useEffect(() => {
 }, [navigate]);
 
 const addTransaction = async () => {
-  if (!amount || !category || !date || !source) {
+  if (
+  !amount ||
+  !category ||
+  !date ||
+  (type === "expense" && !source)
+) {
     alert("Please fill all fields");
     return;
   }
