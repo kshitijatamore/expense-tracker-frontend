@@ -40,6 +40,7 @@ const fetchTransactions = async () => {
     console.log(err);
   }
 };
+const navigate = useNavigate();
 
 useEffect(() => {
   fetchTransactions();
