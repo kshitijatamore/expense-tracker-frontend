@@ -266,7 +266,7 @@ boxSizing: "border-box",
 
       <br /><br />
 
- <input
+<input
   list="categories"
   value={category}
   onChange={(e) => setCategory(e.target.value)}
@@ -293,8 +293,6 @@ boxSizing: "border-box",
   ) : (
     <>
       <option value="Salary" />
-      <option value="Business" />
-      <option value="Pocket Money" />
     </>
   )}
 </datalist>
