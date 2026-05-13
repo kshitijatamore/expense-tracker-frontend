@@ -68,7 +68,7 @@ const addTransaction = async () => {
     const newTransaction = {
       type,
       amount: Number(amount),
-      category,
+      category : type === "income" ? "Salary" : category,
       date
     };
 
@@ -266,36 +266,35 @@ boxSizing: "border-box",
 
       <br /><br />
 
-<input
-  list="categories"
-  value={category}
-  onChange={(e) => setCategory(e.target.value)}
-  placeholder="Enter Category"
-  style={{
-    padding: "10px",
-    width: "100%",
-    boxSizing: "border-box",
-    borderRadius: "8px",
-    border: "1px solid #ccc"
-  }}
-/>
-
-<datalist id="categories">
-  {type === "expense" ? (
-    <>
-      <option value="Food" />
-      <option value="Travel" />
-      <option value="Shopping" />
-      <option value="Bills" />
-      <option value="Petrol" />
-      <option value="Movies" />
-    </>
-  ) : (
-    <>
-      <option value="Salary" />
-    </>
-  )}
-</datalist>
+{type === "income" ? (
+  <input
+    type="text"
+    value="Salary"
+    readOnly
+    style={{
+      padding: "10px",
+      width: "100%",
+      boxSizing: "border-box",
+      borderRadius: "8px",
+      border: "1px solid #ccc",
+      background: "#f0f0f0"
+    }}
+  />
+) : (
+  <input
+    type="text"
+    placeholder="Enter Expense Category"
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    style={{
+      padding: "10px",
+      width: "100%",
+      boxSizing: "border-box",
+      borderRadius: "8px",
+      border: "1px solid #ccc"
+    }}
+  />
+)}
 
       <br /><br />
 
@@ -399,58 +398,6 @@ boxSizing: "border-box",
   ))}
 </div>
 
-<hr style={{ margin: "20px 0" }} />
-
-<h2>Source Analytics</h2>
-
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "10px",
-    marginTop: "10px"
-  }}
->
-  {Object.entries(
-    filteredTransactions.reduce((acc, transaction) => {
-      if (!acc[transaction.source]) {
-        acc[transaction.source] = {
-          income: 0,
-          expense: 0
-        };
-      }
-
-      if (transaction.type === "income") {
-        acc[transaction.source].income += Number(transaction.amount);
-      } else {
-        acc[transaction.source].expense += Number(transaction.amount);
-      }
-
-      return acc;
-    }, {})
-  ).map(([source, values], index) => (
-    <div
-      key={index}
-      style={{
-        padding: "10px",
-        background: "#f0f0f0",
-        borderRadius: "10px"
-      }}
-    >
-      <h3>{source}</h3>
-
-      <p>Income: ₹{values.income}</p>
-
-      <p>Expense: ₹{values.expense}</p>
-
-      <p>
-        Balance: ₹
-        {values.income - values.expense}
-      </p>
-    </div>
-  ))}
-</div>
-
 <h2>Transactions</h2>
 
 {filteredTransactions.map((t, index) => (
@@ -473,9 +420,6 @@ boxSizing: "border-box",
 
   <p>Category: {t.category}</p>
 
-  {t.source && (
-  <p>Paid From: {t.source}</p>
-)}
 
   <p>
     Date:
