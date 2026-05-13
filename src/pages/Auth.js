@@ -12,6 +12,10 @@ function Auth() {
   const API = "https://expense-tracker-react-sh1t.onrender.com";
 
   const register = async () => {
+    if (!email || !password) {
+  alert("Please fill all fields");
+  return;
+}
     try {
 
       await axios.post(
@@ -37,6 +41,10 @@ alert(
   };
 
   const login = async () => {
+    if (!email || !password) {
+  alert("Please fill all fields");
+  return;
+}
     try {
 
       const res = await axios.post(

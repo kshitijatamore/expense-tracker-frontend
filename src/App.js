@@ -1,7 +1,8 @@
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
 
 import Auth from "./pages/Auth";
@@ -19,10 +20,13 @@ function App() {
         />
 
         <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
-
+  path="/dashboard"
+  element={
+    localStorage.getItem("token")
+      ? <Dashboard />
+      : <Navigate to="/" />
+  }
+/>
       </Routes>
 
     </BrowserRouter>
