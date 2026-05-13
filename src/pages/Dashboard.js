@@ -262,25 +262,38 @@ boxSizing: "border-box",
 
       <br /><br />
 
-  <select
+ <input
+  list="categories"
   value={category}
   onChange={(e) => setCategory(e.target.value)}
->
-  <option value="">Select Category</option>
+  placeholder="Enter Category"
+  style={{
+    padding: "10px",
+    width: "100%",
+    boxSizing: "border-box",
+    borderRadius: "8px",
+    border: "1px solid #ccc"
+  }}
+/>
 
+<datalist id="categories">
   {type === "expense" ? (
     <>
-      <option value="Food">Food</option>
-      <option value="Travel">Travel</option>
-      <option value="Shopping">Shopping</option>
-      <option value="Bills">Bills</option>
+      <option value="Food" />
+      <option value="Travel" />
+      <option value="Shopping" />
+      <option value="Bills" />
+      <option value="Petrol" />
+      <option value="Movies" />
     </>
   ) : (
     <>
-      <option value="Salary">Salary</option>
+      <option value="Salary" />
+      <option value="Business" />
+      <option value="Pocket Money" />
     </>
   )}
-</select>
+</datalist>
 
       <br /><br />
 
