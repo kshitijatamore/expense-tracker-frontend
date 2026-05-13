@@ -16,6 +16,7 @@ function Dashboard() {
   const [type, setType] = useState("expense");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
+  const [source, setSource] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [date, setDate] = useState("");
@@ -53,7 +54,7 @@ useEffect(() => {
 }, [navigate]);
 
 const addTransaction = async () => {
-  if (!amount || !category || !date) {
+  if (!amount || !category || !date || !source) {
     alert("Please fill all fields");
     return;
   }
@@ -65,6 +66,7 @@ const addTransaction = async () => {
       type,
       amount: Number(amount),
       category,
+       source,
       date
     };
 
@@ -82,6 +84,7 @@ const addTransaction = async () => {
 
     setAmount("");
     setCategory("");
+    setSource("");
     setDate("");
 
   } catch (err) {
@@ -295,6 +298,29 @@ boxSizing: "border-box",
   )}
 </datalist>
 
+{type === "expense" && (
+  <>
+    <select
+      value={source}
+      onChange={(e) => setSource(e.target.value)}
+      style={{
+        padding: "10px",
+        width: "100%",
+        borderRadius: "8px",
+        marginTop: "10px"
+      }}
+    >
+      <option value="">Select Expense Source</option>
+
+      <option value="Salary">Salary</option>
+      <option value="Business">Business</option>
+      <option value="Pocket Money">Pocket Money</option>
+    </select>
+
+    <br /><br />
+  </>
+)}
+
       <br /><br />
 
 <button
@@ -397,6 +423,57 @@ boxSizing: "border-box",
   ))}
 </div>
 
+<hr style={{ margin: "20px 0" }} />
+
+<h2>Source Analytics</h2>
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+    marginTop: "10px"
+  }}
+>
+  {Object.entries(
+    filteredTransactions.reduce((acc, transaction) => {
+      if (!acc[transaction.source]) {
+        acc[transaction.source] = {
+          income: 0,
+          expense: 0
+        };
+      }
+
+      if (transaction.type === "income") {
+        acc[transaction.source].income += Number(transaction.amount);
+      } else {
+        acc[transaction.source].expense += Number(transaction.amount);
+      }
+
+      return acc;
+    }, {})
+  ).map(([source, values], index) => (
+    <div
+      key={index}
+      style={{
+        padding: "10px",
+        background: "#f0f0f0",
+        borderRadius: "10px"
+      }}
+    >
+      <h3>{source}</h3>
+
+      <p>Income: ₹{values.income}</p>
+
+      <p>Expense: ₹{values.expense}</p>
+
+      <p>
+        Balance: ₹
+        {values.income - values.expense}
+      </p>
+    </div>
+  ))}
+</div>
 
 <h2>Transactions</h2>
 
@@ -419,6 +496,10 @@ boxSizing: "border-box",
   <p>Amount: ₹{t.amount}</p>
 
   <p>Category: {t.category}</p>
+
+  {t.source && (
+  <p>Paid From: {t.source}</p>
+)}
 
   <p>
     Date:
